@@ -24,6 +24,34 @@
 
 ---
 
+**ABOUT  THE FORK:** The original release of Vuex ORM has an [issue](https://github.com/vuex-orm/vuex-orm/issues/416) when updating index keys (like `id`): instead of simply changing the value it would create a duplicate of the record and keep the old version alongside the new record. This prevents the use of optimistic UI patterns.
+
+The user [moravecjakub](https://github.com/moravecjakub) fortunately fixed the issue in July 2020 and created a [pull request](https://github.com/vuex-orm/vuex-orm/pull/664) that was unfortunately never merged. 
+
+:rocket: **Thanks, moravecjakub!** :rocket:
+
+I simply applied the pull request to the most recent version of Vuex ORM (v0.36.4) and made this repository for easy consumption.
+
+**Installation:**
+
+I would suggest to update your `package.json` file's dependencies to associate `@vuex-orm/core` with this repository:
+
+```json
+"dependencies": {
+  ...
+  "@vuex-orm/core": "git@github.com:DasLaboratory/vuex-orm.git",
+  ...
+},
+```
+
+Then simply run `npm install`.
+
+This way you can continue using Vuex ORM in your project without having to change any imports.
+
+Cheers!
+
+---
+
 :fire: **HEADS UP!** Currently, [Vuex ORM Next](https://github.com/vuex-orm/vuex-orm-next) project is on going, and we are hoping it is going to be the foundation of the version 1.0.0 release. We're not planning to add features to current v0.36.3 due to focusing more on Vuex ORM Next development. If you're new to Vuex ORM, please try out Vuex ORM Next.
 
 ---
