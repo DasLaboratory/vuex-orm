@@ -61,7 +61,8 @@ function createEntry(config) {
         target: config.format === 'iife' || config.format === 'cjs' ? 'es5' : 'es2018'
       },
       exclude: ['test']
-    }
+    },
+    abortOnError: false
   }))
 
   if (config.minify) {

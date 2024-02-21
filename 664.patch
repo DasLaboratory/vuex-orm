@@ -1,0 +1,146 @@
+From 7fbd38ec29d013fa2f212288e39bc7e1a0b2c001 Mon Sep 17 00:00:00 2001
+From: Jakub Moravec <jakub.moravec@intraworlds.com>
+Date: Fri, 17 Jul 2020 08:41:25 +0200
+Subject: [PATCH] pull:285 fix update of record with new id
+
+---
+ src/connections/Connection.ts      |  9 +++++++
+ src/modules/RootMutations.ts       |  9 +++++++
+ src/query/Query.ts                 | 39 +++++++++---------------------
+ test/feature/basics/Update.spec.ts |  2 ++
+ 4 files changed, 31 insertions(+), 28 deletions(-)
+
+diff --git a/src/connections/Connection.ts b/src/connections/Connection.ts
+index 4db34830..cacc5182 100644
+--- a/src/connections/Connection.ts
++++ b/src/connections/Connection.ts
+@@ -55,6 +55,15 @@ export default class Connection {
+     this.state.data = { ...this.state.data, ...records }
+   }
+ 
++  /**
++   * Updates the given record.
++   */
++  update(newId: String, record: Record): void {
++    delete this.state.data[record.$id]
++    record.$id = newId
++    this.state.data = { ...this.state.data, [record.$id]: record }
++  }
++
+   /**
+    * Delete records that matches the given id.
+    */
+diff --git a/src/modules/RootMutations.ts b/src/modules/RootMutations.ts
+index c5223279..e4f3d4f4 100644
+--- a/src/modules/RootMutations.ts
++++ b/src/modules/RootMutations.ts
+@@ -32,6 +32,14 @@ function insertRecords(this: Store<any>, state: RootState, payload: any): void {
+   new Connection(this, state.$name, entity).insertRecords(records)
+ }
+ 
++/**
++ * Update the given record.
++ */
++function update(this: Store<any>, state: RootState, payload: any): void {
++  const { entity, record, newId } = payload
++  new Connection(this, state.$name, entity).update(newId, record)
++}
++
+ /**
+  * Delete records from the store. The actual name for this mutation is
+  * `delete`, but named `destroy` here because `delete` can't be declared at
+@@ -46,6 +54,7 @@ const RootMutations: MutationsContract = {
+   $mutate,
+   insert,
+   insertRecords,
++  update,
+   delete: destroy
+ }
+ 
+diff --git a/src/query/Query.ts b/src/query/Query.ts
+index 111a45a5..91c4dd7a 100644
+--- a/src/query/Query.ts
++++ b/src/query/Query.ts
+@@ -1001,8 +1001,6 @@ export default class Query<T extends Model = Model> {
+    * Commit `update` to the state.
+    */
+   private performUpdate(models: Data.Instances<T>): Data.Collection<T> {
+-    models = this.updateIndexes(models)
+-
+     const beforeHooks = this.buildHooks(
+       'beforeUpdate'
+     ) as Contracts.MutationHook[]
+@@ -1021,7 +1019,10 @@ export default class Query<T extends Model = Model> {
+         continue
+       }
+ 
+-      this.commitInsert(model.$getAttributes())
++      this.commitUpdate(
++        String(model.$getIndexIdFromAttributes()),
++        model.$getAttributes()
++      )
+ 
+       afterHooks.forEach((hook) => {
+         hook(model, null, this.entity)
+@@ -1033,31 +1034,6 @@ export default class Query<T extends Model = Model> {
+     return updated
+   }
+ 
+-  /**
+-   * Update the key of the instances. This is needed when a user updates
+-   * record's primary key. We must then update the index key to
+-   * correspond with new id value.
+-   */
+-  private updateIndexes(instances: Data.Instances<T>): Data.Instances<T> {
+-    return Object.keys(instances).reduce<Data.Instances<T>>(
+-      (instances, key) => {
+-        const instance = instances[key]
+-        const id = String(this.model.getIndexIdFromRecord(instance))
+-
+-        if (key !== id) {
+-          instance.$id = id
+-
+-          instances[id] = instance
+-
+-          delete instances[key]
+-        }
+-
+-        return instances
+-      },
+-      instances
+-    )
+-  }
+-
+   /**
+    * Insert or update given data to the state. Unlike `insert`, this method
+    * will not replace existing data within the state, but it will update only
+@@ -1262,6 +1238,13 @@ export default class Query<T extends Model = Model> {
+     this.commit('insert', { record })
+   }
+ 
++  /**
++   * Commit update mutation.
++   */
++  private commitUpdate(newId: String, record: Data.Record): void {
++    this.commit('update', { newId, record })
++  }
++
+   /**
+    * Commit insert records mutation.
+    */
+diff --git a/test/feature/basics/Update.spec.ts b/test/feature/basics/Update.spec.ts
+index 49ef34d9..36ff7f4e 100644
+--- a/test/feature/basics/Update.spec.ts
++++ b/test/feature/basics/Update.spec.ts
+@@ -625,9 +625,11 @@ describe('Feature – Basics – Update', () => {
+     })
+ 
+     const user: any = User.find(2)
++    const count: any = User.query().count()
+ 
+     expect(user.$id).toBe('2')
+     expect(user.id).toBe(2)
++    expect(count).toBe(1)
+   })
+ 
+   it('returns a updated object', async () => {
