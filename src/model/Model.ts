@@ -21,7 +21,16 @@ import ModelState from './contracts/State'
 import InheritanceTypes from './contracts/InheritanceTypes'
 import { toAttributes, toJson } from './Serialize'
 
-export default class Model {
+declare var __DEV__: boolean
+
+interface ModelData {
+  [key: string]: any
+}
+
+export default class Model implements ModelData {
+  static [key: string]: any // Add this for static properties
+  [key: string]: any // This is for instance properties
+
   /**
    * The name that is going be used as module name in Vuex Store.
    */
@@ -902,7 +911,7 @@ export default class Model {
 
     const record = Object.keys(fields).reduce((record, key) => {
       if (fields[key] instanceof Attributes.Type) {
-        record[key] = this[key]
+        record[key] = this[key as keyof Model]
       }
 
       return record
@@ -922,11 +931,13 @@ export default class Model {
     const primaryKey = this.$primaryKey()
 
     if (!Utils.isArray(primaryKey)) {
-      return this.$dispatch('delete', this[primaryKey])
+      return this.$dispatch('delete', this[primaryKey as keyof Model])
     }
 
     return this.$dispatch('delete', (model: this): boolean => {
-      return primaryKey.every((id) => model[id] === this[id])
+      return primaryKey.every(
+        (id) => model[id as keyof Model] === this[id as keyof Model]
+      )
     })
   }
 
@@ -949,7 +960,7 @@ export default class Model {
       const field = fields[key]
       const value = record[key]
 
-      this[key] = field.make(value, record, key)
+      this[key as keyof Model] = field.make(value, record, key)
     }
 
     // If the record contains index id, set it to the model.

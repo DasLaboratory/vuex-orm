@@ -982,19 +982,18 @@ export default class Query<T extends Model = Model> {
   ): Data.Instance<T> {
     if (typeof data === 'function') {
       ;(data as UpdateClosure)(instance)
-
       return instance
     }
 
     // When the updated instance is not the base model, we tell te hydrate what model to use
     if (instance.constructor !== this.model && instance instanceof Model) {
       return this.hydrate(
-        { ...instance, ...data },
+        { ...(instance as object), ...(data as object) },
         instance.constructor as typeof Model
       )
     }
 
-    return this.hydrate({ ...instance, ...data })
+    return this.hydrate({ ...(instance as object), ...(data as object) })
   }
 
   /**

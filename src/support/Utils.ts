@@ -44,7 +44,7 @@ export function isEmpty(collection: any[] | object): boolean {
  * Iterates over own enumerable string keyed properties of an object and
  * invokes `iteratee` for each property.
  */
-export function forOwn<T extends object>(
+export function forOwn<T extends { [key: string]: any }>(
   object: T,
   iteratee: ObjectIteratee<T, void>
 ): void {
@@ -75,23 +75,21 @@ export function map<T extends object, TResult>(
  * iteratee. The iteratee is invoked with three arguments:
  * (value, key, object).
  */
-export function mapValues<T extends object, TResult>(
+export function mapValues<T extends { [key: string]: any }, TResult>(
   object: T,
   iteratee: ObjectIteratee<T, TResult>
 ): Dictionary<TResult> {
-  const newObject = Object.assign({}, object)
-
   return Object.keys(object).reduce((records, key) => {
     records[key] = iteratee(object[key], key, object)
     return records
-  }, newObject)
+  }, {} as Dictionary<TResult>)
 }
 
 /**
  * Creates an object composed of keys generated from the results of running
  * each element of collection by the given key.
  */
-export function keyBy<T extends object>(
+export function keyBy<T extends { [key: string]: any }>(
   collection: T[],
   key: string
 ): Record<string, T> {
@@ -108,7 +106,7 @@ export function keyBy<T extends object>(
  * Creates an array of elements, sorted in specified order by the results
  * of running each element in a collection thru each iteratee.
  */
-export function orderBy<T>(
+export function orderBy<T extends { [key: string]: any }>(
   collection: T[],
   iteratees: (((record: T) => any) | string)[],
   directions: string[]
@@ -258,7 +256,7 @@ export function cloneDeep<T extends object>(target: T): T {
     return cp.map((n: any) => cloneDeep<any>(n)) as any
   }
 
-  if (typeof target === 'object' && target !== {}) {
+  if (typeof target === 'object') {
     const cp = { ...(target as { [key: string]: any }) } as {
       [key: string]: any
     }

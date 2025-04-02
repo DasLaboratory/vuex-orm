@@ -7,11 +7,11 @@ import MutationHook from './MutationHook'
 import HookableClosure from './HookableClosure'
 
 export {
-  Predicate,
-  RelationshipConstraint,
-  GlobalHook,
-  GlobalHooks,
-  SelectHook,
-  MutationHook,
-  HookableClosure
+  type Predicate,
+  type RelationshipConstraint,
+  type GlobalHook,
+  type GlobalHooks,
+  type SelectHook,
+  type MutationHook,
+  type HookableClosure
 }

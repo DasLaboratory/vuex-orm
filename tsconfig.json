@@ -19,31 +19,20 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true,
+    "forceConsistentCasingInFileNames": true,
+    // "suppressImplicitAnyIndexErrors": true,
 
-    "lib": [
-      "esnext",
-      "dom"
-    ],
+    "lib": ["esnext", "dom"],
 
     "paths": {
       "@/*": ["src/*"],
       "test/*": ["test/*"]
     },
 
-    "types": [
-      "node",
-      "jest"
-    ]
+    "types": ["node", "jest"]
   },
 
-  "include": [
-    "src",
-    "test"
-  ],
+  "include": ["src", "test"],
 
-  "exclude": [
-    "lib",
-    "node_modules"
-  ]
+  "exclude": ["lib", "node_modules"]
 }

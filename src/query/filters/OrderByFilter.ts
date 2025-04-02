@@ -18,6 +18,6 @@ export default class OrderByFilter {
     const keys = query.orders.map((order) => order.key)
     const directions = query.orders.map((order) => order.direction)
 
-    return Utils.orderBy(records, keys, directions)
+    return Utils.orderBy(records, keys, directions) as Collection<T>
   }
 }

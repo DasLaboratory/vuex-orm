@@ -10,14 +10,14 @@ import Collection from './Collection'
 import Collections from './Collections'
 
 export {
-  Record,
-  Records,
-  NormalizedData,
-  InstanceOf,
-  Instance,
-  Instances,
-  Entities,
-  Item,
-  Collection,
-  Collections
+  type Record,
+  type Records,
+  type NormalizedData,
+  type InstanceOf,
+  type Instance,
+  type Instances,
+  type Entities,
+  type Item,
+  type Collection,
+  type Collections
 }

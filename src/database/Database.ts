@@ -17,6 +17,8 @@ import ActionsContract from '../modules/contracts/Actions'
 import Getters from '../modules/Getters'
 import Actions from '../modules/Actions'
 
+declare var __DEV__: boolean
+
 export interface Entity {
   name: string
   base: string

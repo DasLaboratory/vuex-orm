@@ -14,18 +14,18 @@ import PersistOptions from './PersistOptions'
 import PrimaryKey from './PrimaryKey'
 
 export {
-  Where,
-  WhereBoolean,
-  WherePrimaryClosure,
-  WhereSecondaryClosure,
-  Has,
-  HasConstraint,
-  Orders,
-  OrderKey,
-  OrderDirection,
-  Constraint,
-  Load,
-  PersistMethods,
-  PersistOptions,
-  PrimaryKey
+  type Where,
+  type WhereBoolean,
+  type WherePrimaryClosure,
+  type WhereSecondaryClosure,
+  type Has,
+  type HasConstraint,
+  type Orders,
+  type OrderKey,
+  type OrderDirection,
+  type Constraint,
+  type Load,
+  type PersistMethods,
+  type PersistOptions,
+  type PrimaryKey
 }
