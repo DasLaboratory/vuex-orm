@@ -1,21 +1,22 @@
-import * as Vuex from 'vuex';
-import Database from '../database/Database';
-import Record from '../data/Record';
-import InstanceOf from '../data/InstanceOf';
-import Item from '../data/Item';
-import Collection from '../data/Collection';
-import Collections from '../data/Collections';
-import State from '../modules/contracts/State';
-import * as Attributes from '../attributes';
-import Mutator from '../attributes/contracts/Mutator';
-import Mutators from '../attributes/contracts/Mutators';
-import Predicate from '../query/contracts/Predicate';
-import Query from '../query/Query';
-import * as Payloads from '../modules/payloads/Actions';
-import Fields from './contracts/Fields';
-import FieldCache from './contracts/FieldCache';
-import ModelState from './contracts/State';
-import InheritanceTypes from './contracts/InheritanceTypes';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type * as Vuex from 'vuex';
+import type Database from '../database/Database';
+import type Record from '../data/Record';
+import type InstanceOf from '../data/InstanceOf';
+import type Item from '../data/Item';
+import type Collection from '../data/Collection';
+import type Collections from '../data/Collections';
+import type State from '../modules/contracts/State';
+import type * as Attributes from '../attributes';
+import type Mutator from '../attributes/contracts/Mutator';
+import type Mutators from '../attributes/contracts/Mutators';
+import type Predicate from '../query/contracts/Predicate';
+import type Query from '../query/Query';
+import type * as Payloads from '../modules/payloads/Actions';
+import type Fields from './contracts/Fields';
+import type FieldCache from './contracts/FieldCache';
+import type ModelState from './contracts/State';
+import type InheritanceTypes from './contracts/InheritanceTypes';
 export default class Model {
     /**
      * The name that is going be used as module name in Vuex Store.

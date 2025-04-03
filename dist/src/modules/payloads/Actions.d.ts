@@ -1,6 +1,7 @@
-import { Record } from '../../data';
-import Predicate from '../../query/contracts/Predicate';
-import PersistOptions from '../../query/options/PersistOptions';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { Record } from '../../data';
+import type Predicate from '../../query/contracts/Predicate';
+import type PersistOptions from '../../query/options/PersistOptions';
 export type Condition = (record: Record) => boolean;
 export interface Create extends PersistOptions {
     data: Record | Record[];
